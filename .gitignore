@@ -1,0 +1,25 @@
+# Go build
+/bin/
+/build/
+/dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Go workspace stuff
+*.log
+*.out
+*.tmp
+
+# Dependency cache
+vendor/
+
+# Editor/OS/IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
