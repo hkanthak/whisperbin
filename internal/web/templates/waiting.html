@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>WhisperBin – Waiting</title>
+  <script>
+    const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
+    socket.onmessage = function (event) {
+      document.getElementById("secret").textContent = event.data
+      document.getElementById("status").style.display = "none"
+      document.getElementById("content").style.display = "block"
+    };
+  </script>
+</head>
+
+<body style="font-family: system-ui; max-width: 600px; margin: 3em auto; text-align: center;">
+  <h1>Waiting for sender…</h1>
+  <p><strong>Your passcode:</strong> {{.Code}}</p>
+  <div id="status">
+    <p>Please wait while the sender unlocks your secret.</p>
+  </div>
+  <div id="content" style="display: none;">
+    <p><strong>Secret:</strong></p>
+    <pre id="secret" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 1em;"></pre>
+    <button onclick="copySecret()">Copy</button>
+  </div>
+
+  <script>
+    function copySecret() {
+      const text = document.getElementById("secret").textContent
+      navigator.clipboard.writeText(text)
+    }
+  </script>
+</body>
+
+</html>

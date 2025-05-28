@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WhisperBin – Share Secret</title>
+    <script>
+        function pollStatus() {
+            fetch("/status/{{.ID}}")
+                .then(res => res.ok ? res.json() : null)
+                .then(data => {
+                    if (data && data.waiting) {
+                        document.getElementById("waiting").style.display = "block";
+                        document.getElementById("unlock").disabled = false;
+                    }
+                });
+        }
+        setInterval(pollStatus, 1000);
+    </script>
+</head>
+<body style="font-family: system-ui; max-width: 600px; margin: 3em auto; text-align: center;">
+    <h1>Secret created</h1>
+
+    <p>Share this link:</p>
+    <p>
+        <a href="/{{.ID}}" target="_blank" rel="noopener noreferrer">
+            {{printf "/%s" .ID}}
+        </a>
+    </p>
+
+    <p>Enter the code from the recipient to release the secret:</p>
+    <form action="/confirm/{{.ID}}" method="post" style="margin-bottom: 2em;">
+        <input type="text" name="code" placeholder="Code from recipient">
+        <button id="unlock" type="submit" disabled>Unlock Secret</button>
+    </form>
+
+    <div id="waiting" style="display:none;">
+        <p><strong>Recipient is waiting for approval…</strong></p>
+    </div>
+</body>
+</html>

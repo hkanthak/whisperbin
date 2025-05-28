@@ -9,9 +9,17 @@
     <form action="/secret" method="post">
         <textarea name="secret" rows="5" style="width: 100%;" placeholder="Paste your secret here"></textarea>
         <br><br>
-        <input type="number" name="ttl" placeholder="TTL in minutes (default 10)" min="1">
+
+        <input type="number" name="ttl" placeholder="TTL in minutes (default 10)" min="1" style="width: 50%;">
         <br><br>
-        <button type="submit">Create Link</button>
+
+        <label>
+            <input type="checkbox" name="secure">
+            Require manual approval before secret is shown
+        </label>
+
+        <br><br>
+        <button type="submit">Create Secret</button>
     </form>
 </body>
 </html>
