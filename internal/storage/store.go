@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"os"
 	"sync"
 	"time"
 )
@@ -15,10 +16,23 @@ type Store struct {
 }
 
 func NewStore() *Store {
-	key := make([]byte, 32)
-	if _, err := rand.Read(key); err != nil {
-		panic("could not generate encryption key")
+	var key []byte
+	envKey := os.Getenv("SECRET_KEY")
+
+	if envKey != "" {
+		decoded, err := base64.StdEncoding.DecodeString(envKey)
+		if err != nil || len(decoded) != 32 {
+			panic("invalid SECRET_KEY: must be 32-byte base64-encoded")
+		}
+		key = decoded
+	} else {
+		key = make([]byte, 32)
+		if _, err := rand.Read(key); err != nil {
+			panic("could not generate encryption key")
+		}
 	}
+	
+
 	return &Store{
 		secrets: make(map[string]*Secret),
 		key:     key,
