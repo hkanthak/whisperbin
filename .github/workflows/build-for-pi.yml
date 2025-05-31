@@ -22,7 +22,7 @@ jobs:
 
       - name: Cross-compile Go binary for ARM64
         run: |
-          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o whisperbin
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o whisperbin ./cmd/whisperbin
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
