@@ -11,8 +11,7 @@ RUN go mod download
 # Restlichen Source-Code kopieren
 COPY . .
 
-# Build für Linux ARM64 (Pi 4)
-RUN GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o whisperbin
+RUN go build -ldflags="-s -w" -o whisperbin
 
 # -------- Runtime Stage --------
 FROM debian:bookworm-slim
