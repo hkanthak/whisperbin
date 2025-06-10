@@ -1,7 +1,6 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -22,7 +21,11 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 
 	text := strings.TrimSpace(r.FormValue("secret"))
 	ttl := 10
-	fmt.Sscanf(r.FormValue("ttl"), "%d", &ttl)
+	if ttl < 1 {
+		ttl = 1
+	} else if ttl > 1440 {
+		ttl = 1440
+	}
 	secure := r.FormValue("secure") == "on"
 
 	id, _, err := h.store.Save(text, ttl, secure)
