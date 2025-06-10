@@ -7,6 +7,7 @@
 <body style="font-family: system-ui; max-width: 600px; margin: 3em auto; text-align: center;">
     <h1>Share a one-time secret</h1>
     <form action="/secret" method="post">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
         <textarea name="secret" rows="5" style="width: 100%;" placeholder="Paste your secret here"></textarea>
         <br><br>
 

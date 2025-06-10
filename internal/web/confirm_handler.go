@@ -12,6 +12,11 @@ func (h *Handler) confirmHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if !h.validateCSRF(w, r) {
+		http.Error(w, "Invalid CSRF token", http.StatusForbidden)
+		return
+	}
+
 	id := strings.TrimPrefix(r.URL.Path, "/confirm/")
 	code := strings.TrimSpace(r.FormValue("code"))
 

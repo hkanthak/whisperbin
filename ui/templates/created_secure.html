@@ -29,6 +29,7 @@
 
     <p>Enter the code from the recipient to release the secret:</p>
     <form action="/confirm/{{.ID}}" method="post" style="margin-bottom: 2em;">
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
         <input type="text" name="code" placeholder="Code from recipient">
         <button id="unlock" type="submit" disabled>Unlock Secret</button>
     </form>
