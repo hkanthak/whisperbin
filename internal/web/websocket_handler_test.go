@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http/httptest"
+	"net/http"
 	"net/url"
 	"testing"
 	"time"
@@ -32,7 +33,9 @@ func TestWebSocket_ReceivesSecretOnce(t *testing.T) {
 	q.Set("id", id)
 	u.RawQuery = q.Encode()
 
-	ws, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	ws, _, err := websocket.DefaultDialer.Dial(u.String(), http.Header{
+		"Origin": []string{h.allowedOrigin},
+	})
 	if err != nil {
 		t.Fatalf("WebSocket connect failed: %v", err)
 	}

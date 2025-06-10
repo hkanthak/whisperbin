@@ -11,10 +11,8 @@ func TestStore_SecureFlow(t *testing.T) {
 		key[i] = byte(i)
 	}
 
-	store := &Store{
-		secrets: make(map[string]*Secret),
-		key:     key,
-	}
+	store := NewStore()
+	store.key = key
 
 	text := "super secret"
 	id, code, err := store.Save(text, 5, true)
@@ -34,7 +32,7 @@ func TestStore_SecureFlow(t *testing.T) {
 	listenerReady := make(chan struct{})
 
 	go func() {
-		listenerReady <- struct{}{} // signal: listener beginnt
+		listenerReady <- struct{}{}
 		got, err := store.WaitForUnlock(id)
 		if err != nil {
 			t.Errorf("WaitForUnlock failed: %v", err)
@@ -50,12 +48,12 @@ func TestStore_SecureFlow(t *testing.T) {
 
 	<-listenerReady
 
-	err = store.Confirm(id, "wrong")
+	err = store.Confirm(id, "wrong", "127.0.0.1")
 	if err == nil {
 		t.Error("Expected Confirm to fail with wrong code")
 	}
 
-	err = store.Confirm(id, code)
+	err = store.Confirm(id, code, "127.0.0.1")
 	if err != nil {
 		t.Fatalf("Confirm failed with correct code: %v", err)
 	}
