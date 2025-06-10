@@ -6,15 +6,16 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true // für Dev; in Prod auf Origin prüfen!
-	},
-}
-
 func (h *Handler) WebSocketHandler(w http.ResponseWriter, r *http.Request) {
+	upgrader := websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			origin := r.Header.Get("Origin")
+			return origin == h.allowedOrigin
+		},
+	}
+
 	id := r.URL.Query().Get("id")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
