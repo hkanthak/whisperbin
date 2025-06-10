@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -35,6 +36,14 @@ func (h *Handler) WebSocketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	text = sanitize(text)
+
 	conn.WriteMessage(websocket.TextMessage, []byte(text))
 	h.store.Delete(id)
+}
+
+func sanitize(s string) string {
+	s = strings.ReplaceAll(s, "\u2028", "")
+	s = strings.ReplaceAll(s, "\u2029", "")
+	return s
 }
