@@ -9,8 +9,9 @@ import (
 )
 
 type Handler struct {
-	store     *storage.Store
-	templates *template.Template
+	store         *storage.Store
+	templates     *template.Template
+	allowedOrigin string
 }
 
 func NewHandler(store *storage.Store) *Handler {
@@ -24,9 +25,16 @@ func NewHandler(store *storage.Store) *Handler {
 
 func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
 	tmpl := template.Must(template.ParseGlob(pattern))
+
+	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+	if allowedOrigin == "" {
+		allowedOrigin = "http://localhost:8080"
+	}
+
 	return &Handler{
-		store:     store,
-		templates: tmpl,
+		store:         store,
+		templates:     tmpl,
+		allowedOrigin: allowedOrigin,
 	}
 }
 
