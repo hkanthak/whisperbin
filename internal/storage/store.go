@@ -2,6 +2,7 @@ package storage
 
 import (
 	"crypto/rand"
+	"crypto/subtle"
 	"encoding/base64"
 	"errors"
 	"os"
@@ -31,7 +32,6 @@ func NewStore() *Store {
 			panic("could not generate encryption key")
 		}
 	}
-	
 
 	return &Store{
 		secrets: make(map[string]*Secret),
@@ -40,6 +40,8 @@ func NewStore() *Store {
 }
 
 func (s *Store) Save(text string, ttlMinutes int, withApproval bool) (string, string, error) {
+	s.CleanupExpired()
+
 	id, err := generateID()
 	if err != nil {
 		return "", "", err
@@ -95,7 +97,7 @@ func (s *Store) Confirm(id, inputCode string) error {
 		s.mu.Unlock()
 		return errors.New("not found or expired")
 	}
-	if sec.Code != inputCode {
+	if subtle.ConstantTimeCompare([]byte(sec.Code), []byte(inputCode)) != 1 {
 		s.mu.Unlock()
 		return errors.New("invalid code")
 	}
@@ -158,4 +160,16 @@ func (s *Store) IsWaiting(id string) (bool, error) {
 	}
 	waiting := secret.WaitingCh != nil && !secret.Unlocked
 	return waiting, nil
+}
+
+func (s *Store) CleanupExpired() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	now := time.Now()
+	for id, sec := range s.secrets {
+		if now.After(sec.ExpiresAt) {
+			delete(s.secrets, id)
+		}
+	}
 }
