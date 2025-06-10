@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
-	"time"
 )
 
 func generateID() (string, error) {
@@ -19,8 +18,15 @@ func generateID() (string, error) {
 }
 
 func generateCode() string {
-	return fmt.Sprintf("%02d", time.Now().UnixNano()%100)
+	n := make([]byte, 3)
+	if _, err := rand.Read(n); err != nil {
+		panic("could not generate code")
+	}
+	val := int(n[0])<<16 | int(n[1])<<8 | int(n[2])
+	return fmt.Sprintf("%06d", val%1000000)
 }
+
+
 
 func encrypt(plaintext, key []byte) ([]byte, []byte, error) {
 	block, err := aes.NewCipher(key)
