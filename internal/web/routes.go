@@ -1,49 +1,72 @@
 package web
 
 import (
-	"html/template"
+	"net"
 	"net/http"
-	"os"
-	"path/filepath"
-	"whisperbin/internal/storage"
+	"strings"
+	"sync"
+
+	"golang.org/x/time/rate"
 )
 
-type Handler struct {
-	store         *storage.Store
-	templates     *template.Template
-	allowedOrigin string
+type ipLimiter struct {
+	limiters map[string]*rate.Limiter
+	mu       sync.Mutex
+	rate     rate.Limit
+	burst    int
 }
 
-func NewHandler(store *storage.Store) *Handler {
-	root, err := os.Getwd()
-	if err != nil {
-		panic("could not resolve working dir")
+func newIPLimiter(r rate.Limit, b int) *ipLimiter {
+	return &ipLimiter{
+		limiters: make(map[string]*rate.Limiter),
+		rate:     r,
+		burst:    b,
 	}
-	path := filepath.Join(root, "ui", "templates", "*.html")
-	return NewHandlerWithTemplates(store, path)
 }
 
-func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
-	tmpl := template.Must(template.ParseGlob(pattern))
+func (l *ipLimiter) getLimiter(ip string) *rate.Limiter {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 
-	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
-	if allowedOrigin == "" {
-		allowedOrigin = "http://localhost:8080"
+	limiter, exists := l.limiters[ip]
+	if !exists {
+		limiter = rate.NewLimiter(l.rate, l.burst)
+		l.limiters[ip] = limiter
 	}
+	return limiter
+}
 
-	return &Handler{
-		store:         store,
-		templates:     tmpl,
-		allowedOrigin: allowedOrigin,
+func (h *Handler) rateLimit(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ip := extractIP(r)
+		limiter := h.ipLimiter.getLimiter(ip)
+		if !limiter.Allow() {
+			http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
+			return
+		}
+		next.ServeHTTP(w, r)
 	}
+}
+
+func extractIP(r *http.Request) string {
+	ip := r.RemoteAddr
+	if ip == "" {
+		return ""
+	}
+	if strings.Contains(ip, ":") {
+		ip, _, _ = net.SplitHostPort(ip)
+	}
+	return ip
 }
 
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
+
 	mux.HandleFunc("/", h.formHandler)
-	mux.HandleFunc("/secret", h.createHandler)
-	mux.HandleFunc("/confirm/", h.confirmHandler)
-	mux.HandleFunc("/status/", h.statusHandler)
-	mux.HandleFunc("/ws", h.WebSocketHandler)
+	mux.HandleFunc("/secret", h.rateLimit(h.createHandler))
+	mux.HandleFunc("/confirm/", h.rateLimit(h.confirmHandler))
+	mux.HandleFunc("/status/", h.rateLimit(h.statusHandler))
+	mux.HandleFunc("/ws", h.rateLimit(h.WebSocketHandler))
+
 	return mux
 }
