@@ -11,9 +11,11 @@ import (
 )
 
 type Store struct {
-	mu      sync.Mutex
-	secrets map[string]*Secret
-	key     []byte
+	mu               sync.Mutex
+	secrets          map[string]*Secret
+	key              []byte
+	confirmFailures  map[string]map[string]int
+	confirmBlockedAt map[string]map[string]time.Time
 }
 
 func NewStore() *Store {
@@ -34,8 +36,10 @@ func NewStore() *Store {
 	}
 
 	return &Store{
-		secrets: make(map[string]*Secret),
-		key:     key,
+		secrets:          make(map[string]*Secret),
+		key:              key,
+		confirmFailures:  make(map[string]map[string]int),
+		confirmBlockedAt: make(map[string]map[string]time.Time),
 	}
 }
 
@@ -87,20 +91,30 @@ func (s *Store) Get(id string) (*Secret, error) {
 func (s *Store) Delete(id string) {
 	s.mu.Lock()
 	delete(s.secrets, id)
+	delete(s.confirmFailures, id)
+	delete(s.confirmBlockedAt, id)
 	s.mu.Unlock()
 }
 
-func (s *Store) Confirm(id, inputCode string) error {
+func (s *Store) Confirm(id, inputCode, ip string) error {
 	s.mu.Lock()
 	sec, ok := s.secrets[id]
 	if !ok || time.Now().After(sec.ExpiresAt) {
 		s.mu.Unlock()
 		return errors.New("not found or expired")
 	}
+
+	if s.isBlocked(id, ip) {
+		s.mu.Unlock()
+		return errors.New("too many failed attempts, temporarily blocked")
+	}
+
 	if subtle.ConstantTimeCompare([]byte(sec.Code), []byte(inputCode)) != 1 {
+		s.incrementFailure(id, ip)
 		s.mu.Unlock()
 		return errors.New("invalid code")
 	}
+
 	if sec.WaitingCh == nil || !sec.listenerSet {
 		s.mu.Unlock()
 		return errors.New("no recipient waiting")
@@ -112,6 +126,9 @@ func (s *Store) Confirm(id, inputCode string) error {
 	sec.Unlocked = true
 	close(sec.WaitingCh)
 	sec.WaitingCh = nil
+
+	s.resetFailures(id, ip)
+
 	s.mu.Unlock()
 	return nil
 }
@@ -170,6 +187,46 @@ func (s *Store) CleanupExpired() {
 	for id, sec := range s.secrets {
 		if now.After(sec.ExpiresAt) {
 			delete(s.secrets, id)
+			delete(s.confirmFailures, id)
+			delete(s.confirmBlockedAt, id)
 		}
 	}
+}
+
+func (s *Store) incrementFailure(id, ip string) {
+	if s.confirmFailures[id] == nil {
+		s.confirmFailures[id] = make(map[string]int)
+	}
+	s.confirmFailures[id][ip]++
+	if s.confirmFailures[id][ip] >= 5 {
+		if s.confirmBlockedAt[id] == nil {
+			s.confirmBlockedAt[id] = make(map[string]time.Time)
+		}
+		s.confirmBlockedAt[id][ip] = time.Now().Add(1 * time.Minute)
+	}
+}
+
+func (s *Store) resetFailures(id, ip string) {
+	if s.confirmFailures[id] != nil {
+		delete(s.confirmFailures[id], ip)
+	}
+	if s.confirmBlockedAt[id] != nil {
+		delete(s.confirmBlockedAt[id], ip)
+	}
+}
+
+func (s *Store) isBlocked(id, ip string) bool {
+	blockMap, exists := s.confirmBlockedAt[id]
+	if !exists {
+		return false
+	}
+	blockTime, blocked := blockMap[ip]
+	if !blocked {
+		return false
+	}
+	if time.Now().After(blockTime) {
+		delete(blockMap, ip)
+		return false
+	}
+	return true
 }

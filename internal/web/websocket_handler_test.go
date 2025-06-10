@@ -6,8 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gorilla/websocket"
 	"whisperbin/internal/storage"
+
+	"github.com/gorilla/websocket"
 )
 
 func TestWebSocket_ReceivesSecretOnce(t *testing.T) {
@@ -39,7 +40,7 @@ func TestWebSocket_ReceivesSecretOnce(t *testing.T) {
 
 	go func() {
 		time.Sleep(50 * time.Millisecond)
-		store.Confirm(id, code)
+		store.Confirm(id, code, "127.0.0.1")
 	}()
 
 	ws.SetReadDeadline(time.Now().Add(1 * time.Second))
