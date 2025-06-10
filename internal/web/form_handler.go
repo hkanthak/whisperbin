@@ -40,6 +40,11 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	text := strings.TrimSpace(r.FormValue("secret"))
+	if len(text) > 10240 {
+		http.Error(w, "Secret too large", http.StatusRequestEntityTooLarge)
+		return
+	}
+
 	ttl := 10
 	if ttl < 1 {
 		ttl = 1
