@@ -23,16 +23,15 @@
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
-        <h2 id="heading">Waiting for sender…</h2>
 
-        <p><strong>Your passcode:</strong> {{.Code}}</p>
+        <p><strong>Your recipient passcode:</strong> {{.Code}}</p>
 
         <div id="status">
-            <p>Please wait while the sender unlocks your secret.</p>
+            <p>Waiting for sender to unlock…</p>
         </div>
 
         <div id="content" style="display: none;">
-            <p><strong>Secret:</strong></p>
+            <p><strong>Your Secret:</strong></p>
 
             <div class="secret-field">
                 <input type="password" id="secret" readonly>
@@ -43,6 +42,8 @@
                 </div>
             </div>
         </div>
+
+        <a href="/" class="back-button">Back to WhisperBin</a>
 
         <footer>
             Your secrets, shared safely &mdash; one time only

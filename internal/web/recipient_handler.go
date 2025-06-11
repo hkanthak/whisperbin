@@ -11,14 +11,14 @@ func (h *Handler) recipientHandler(w http.ResponseWriter, r *http.Request) {
 
 	secret, err := h.store.Get(id)
 	if err != nil {
-		http.NotFound(w, r)
+		h.renderError(w, http.StatusNotFound, "Not Found", "Secret not found or expired.")
 		return
 	}
 
 	if secret.Unlocked {
 		text, err := h.store.DecryptSecretText(secret)
 		if err != nil {
-			http.Error(w, "Failed to decrypt", http.StatusInternalServerError)
+			h.renderError(w, http.StatusInternalServerError, "Internal Error", "An unexpected error occurred.")
 			return
 		}
 		h.store.Delete(id)

@@ -159,3 +159,11 @@ footer {
 label[for="secure"] {
     margin-bottom: 1rem;
 }
+
+.back-button {
+    display: inline-block;
+    margin-bottom: .5rem;
+    margin-top: 1.2rem;
+    text-decoration: none;
+    cursor: pointer;
+}

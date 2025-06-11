@@ -12,7 +12,7 @@ func (h *Handler) confirmHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !h.validateCSRF(w, r) {
-		http.Error(w, "Invalid request", http.StatusForbidden)
+		h.renderError(w, http.StatusForbidden, "Invalid Request", "	Invalid request. Please try again.")
 		return
 	}
 
@@ -22,9 +22,9 @@ func (h *Handler) confirmHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := h.store.Confirm(id, code, ip)
 	if err != nil {
-		http.Error(w, "Invalid request", http.StatusForbidden)
+		h.renderError(w, http.StatusForbidden, "Invalid Request", "Invalid confirmation code or expired link.")
 		return
 	}
 
-	w.Write([]byte("Secret unlocked. Recipient can now view the secret."))
+	h.renderSuccess(w, "Secret unlocked", "Recipient can now view the secret.")
 }

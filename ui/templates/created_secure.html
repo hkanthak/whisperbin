@@ -31,16 +31,15 @@
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
-        <h2>Secret created</h2>
 
-        <p>Share this link:</p>
+        <p>Share this one-time link:</p>
         <p>
             <a href="/{{.ID}}" target="_blank" rel="noopener noreferrer">
                 {{printf "/%s" .ID}}
             </a>
         </p>
 
-        <p>Enter the code from the recipient to release the secret:</p>
+        <p>Enter the passcode from the recipient:</p>
         <form action="/confirm/{{.ID}}" method="post">
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
             <input type="text" name="code" placeholder="Code from recipient">
@@ -54,6 +53,8 @@
         <div id="received" style="display:none;">
             <p><strong>✅ Secret was received.</strong></p>
         </div>
+
+        <a href="/" class="back-button">Back to WhisperBin</a>
 
         <footer>
             Your secrets, shared safely &mdash; one time only

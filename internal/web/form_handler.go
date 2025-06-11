@@ -1,9 +1,6 @@
 package web
 
 import (
-	"crypto/rand"
-	"crypto/subtle"
-	"encoding/base64"
 	"net/http"
 	"strings"
 	"time"
@@ -91,24 +88,4 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		h.templates.ExecuteTemplate(w, "created.html", "/"+id)
 	}
-}
-
-func (h *Handler) generateCSRFToken() (string, error) {
-	b := make([]byte, 32)
-	if _, err := rand.Read(b); err != nil {
-		return "", err
-	}
-	return base64.URLEncoding.EncodeToString(b), nil
-}
-
-func (h *Handler) validateCSRF(w http.ResponseWriter, r *http.Request) bool {
-	cookie, err := r.Cookie("csrf_token")
-	if err != nil {
-		return false
-	}
-	formToken := r.FormValue("csrf_token")
-	if len(cookie.Value) != len(formToken) {
-		return false
-	}
-	return subtle.ConstantTimeCompare([]byte(cookie.Value), []byte(formToken)) == 1
 }

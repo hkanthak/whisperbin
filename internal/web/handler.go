@@ -1,7 +1,11 @@
 package web
 
 import (
+	"crypto/rand"
+	"crypto/subtle"
+	"encoding/base64"
 	"html/template"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -41,4 +45,45 @@ func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
 		allowedOrigin: allowedOrigin,
 		ipLimiter:     ipLimiter,
 	}
+}
+
+func (h *Handler) generateCSRFToken() (string, error) {
+	b := make([]byte, 32)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(b), nil
+}
+
+func (h *Handler) validateCSRF(w http.ResponseWriter, r *http.Request) bool {
+	cookie, err := r.Cookie("csrf_token")
+	if err != nil {
+		return false
+	}
+	formToken := r.FormValue("csrf_token")
+	if len(cookie.Value) != len(formToken) {
+		return false
+	}
+	return subtle.ConstantTimeCompare([]byte(cookie.Value), []byte(formToken)) == 1
+}
+
+func (h *Handler) renderError(w http.ResponseWriter, status int, title string, message string) {
+	w.WriteHeader(status)
+	h.templates.ExecuteTemplate(w, "error.html", struct {
+		Title   string
+		Message string
+	}{
+		Title:   title,
+		Message: message,
+	})
+}
+
+func (h *Handler) renderSuccess(w http.ResponseWriter, title string, message string) {
+	h.templates.ExecuteTemplate(w, "success.html", struct {
+		Title   string
+		Message string
+	}{
+		Title:   title,
+		Message: message,
+	})
 }
