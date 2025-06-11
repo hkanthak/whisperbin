@@ -17,16 +17,14 @@ func generateID() (string, error) {
 	return base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(b), nil
 }
 
-func generateCode() string {
+func generateCode() (string, error) {
 	n := make([]byte, 3)
 	if _, err := rand.Read(n); err != nil {
-		panic("could not generate code")
+		return "", err
 	}
 	val := int(n[0])<<16 | int(n[1])<<8 | int(n[2])
-	return fmt.Sprintf("%06d", val%1000000)
+	return fmt.Sprintf("%06d", val%1000000), nil
 }
-
-
 
 func encrypt(plaintext, key []byte) ([]byte, []byte, error) {
 	block, err := aes.NewCipher(key)

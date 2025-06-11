@@ -14,7 +14,12 @@ func (h *Handler) formHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := h.generateCSRFToken()
+	token, err := h.generateCSRFToken()
+	if err != nil {
+		http.Error(w, "Could not generate CSRF token", http.StatusInternalServerError)
+		return
+	}
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "csrf_token",
 		Value:    token,
@@ -59,7 +64,12 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := h.generateCSRFToken()
+	token, err := h.generateCSRFToken()
+	if err != nil {
+		http.Error(w, "Could not generate CSRF token", http.StatusInternalServerError)
+		return
+	}
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "csrf_token",
 		Value:    token,
@@ -80,13 +90,12 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) generateCSRFToken() string {
+func (h *Handler) generateCSRFToken() (string, error) {
 	b := make([]byte, 32)
-	_, err := rand.Read(b)
-	if err != nil {
-		panic("could not generate CSRF token")
+	if _, err := rand.Read(b); err != nil {
+		return "", err
 	}
-	return base64.URLEncoding.EncodeToString(b)
+	return base64.URLEncoding.EncodeToString(b), nil
 }
 
 func (h *Handler) validateCSRF(w http.ResponseWriter, r *http.Request) bool {

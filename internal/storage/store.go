@@ -64,7 +64,11 @@ func (s *Store) Save(text string, ttlMinutes int, withApproval bool) (string, st
 	}
 
 	if withApproval {
-		secret.Code = generateCode()
+		code, err := generateCode()
+		if err != nil {
+			return "", "", err
+		}
+		secret.Code = code
 		secret.Unlocked = false
 		secret.WaitingCh = make(chan struct{})
 	} else {
