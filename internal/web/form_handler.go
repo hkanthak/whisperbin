@@ -2,6 +2,7 @@ package web
 
 import (
 	"crypto/rand"
+	"crypto/subtle"
 	"encoding/base64"
 	"net/http"
 	"strings"
@@ -104,16 +105,8 @@ func (h *Handler) validateCSRF(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 	formToken := r.FormValue("csrf_token")
-	return subtleConstantTimeCompare(cookie.Value, formToken)
-}
-
-func subtleConstantTimeCompare(a, b string) bool {
-	if len(a) != len(b) {
+	if len(cookie.Value) != len(formToken) {
 		return false
 	}
-	var result byte
-	for i := 0; i < len(a); i++ {
-		result |= a[i] ^ b[i]
-	}
-	return result == 0
+	return subtle.ConstantTimeCompare([]byte(cookie.Value), []byte(formToken)) == 1
 }
