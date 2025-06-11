@@ -24,9 +24,7 @@
 
 <body>
     <main class="fade-in">
-        <a href="/">
-            <img src="/static/title.png" alt="Artistic visual" class="title-image">
-        </a>
+        {{ template "header" . }}
 
         <div id="passcode" style="margin-bottom: 1rem;">
             <p><strong>Your passcode:</strong></p>
@@ -61,9 +59,7 @@
 
         <a href="/" class="back-button">Back to WhisperBin</a>
 
-        <footer>
-            Your secrets, shared safely &mdash; one time only
-        </footer>
+        {{ template "footer" . }}
     </main>
 
     <script>

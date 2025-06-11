@@ -12,9 +12,8 @@
 
 <body>
     <main class="fade-in">
-        <a href="/">
-            <img src="/static/title.png" alt="Artistic visual" class="title-image">
-        </a>
+        {{ template "header" . }}
+
         <form action="/secret" method="post">
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
@@ -38,9 +37,7 @@
             <img src="/static/art.png" alt="Artistic visual" class="art-image">
         </form>
 
-        <footer>
-            Your secrets, shared safely &mdash; one time only
-        </footer>
+        {{ template "footer" . }}
     </main>
 
     <script>

@@ -13,27 +13,25 @@
 <body>
     <main class="fade-in">
         <a href="/">
-            <img src="/static/title.png" alt="Artistic visual" class="title-image">
-        </a>
+            {{ template "header" . }}
 
-        <p><strong>Your Secret:</strong></p>
+            <p><strong>Your Secret:</strong></p>
 
-        <div class="secret-field">
-            <input type="password" id="secret" value="{{.}}" readonly>
+            <div class="secret-field">
+                <input type="password" id="secret" value="{{.}}" readonly>
 
-            <div class="secret-actions">
-                <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
-                <button type="button" onclick="copySecret()" id="copy-btn">Copy</button>
+                <div class="secret-actions">
+                    <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
+                    <button type="button" onclick="copySecret()" id="copy-btn">Copy</button>
+                </div>
             </div>
-        </div>
 
-        <p>This secret has now been deleted.</p>
+            <p>This secret has now been deleted.</p>
 
-        <a href="/" class="back-button">Back to WhisperBin</a>
+            <a href="/" class="back-button">Back to WhisperBin</a>
 
-        <footer>
-            Your secrets, shared safely &mdash; one time only
-        </footer>
+            {{ template "footer" . }}
+
     </main>
 
     <script>

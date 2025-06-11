@@ -2,27 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>WhisperBin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
-    <link href="/static/style.css" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <meta charset="UTF-8">
+  <title>WhisperBin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
+  <link href="/static/style.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 </head>
 
 <body>
-    <main class="fade-in">
-        <a href="/">
-            <img src="/static/title.png" alt="Artistic visual" class="title-image">
-        </a>
-        <p>{{.Message}}</p>
+  <main class="fade-in">
+    {{ template "header" . }}
 
-        <a href="/" class="back-button">Back to WhisperBin</a>
+    <p>{{.Message}}</p>
 
-        <footer>
-            Your secrets, shared safely &mdash; one time only
-        </footer>
-    </main>
+    <a href="/" class="back-button">Back to WhisperBin</a>
+
+    {{ template "footer" . }}
+  </main>
 </body>
 
 </html>

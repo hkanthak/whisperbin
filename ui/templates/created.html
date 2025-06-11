@@ -13,38 +13,37 @@
 <body>
     <main class="fade-in">
         <a href="/">
-            <img src="/static/title.png" alt="Artistic visual" class="title-image">
-        </a>
+            {{ template "header" . }}
 
-        <p>Share this one-time link:</p>
+            <p>Share this one-time link:</p>
 
-        <div class="secret-field" style="margin-bottom: 0.5rem;">
-            <input type="text" id="secret-link" value="{{.Link}}" readonly>
+            <div class="secret-field" style="margin-bottom: 0.5rem;">
+                <input type="text" id="secret-link" value="{{.Link}}" readonly>
 
-            <div class="secret-actions">
-                <button type="button" onclick="copyToClipboard('secret-link', 'copy-link-btn')" id="copy-link-btn">Copy</button>
+                <div class="secret-actions">
+                    <button type="button" onclick="copyToClipboard('secret-link', 'copy-link-btn')"
+                        id="copy-link-btn">Copy</button>
+                </div>
             </div>
-        </div>
 
-        <p>This link works only once.</p>
+            <p>This link works only once.</p>
 
-        <a href="/" class="back-button">Back to WhisperBin</a>
+            <a href="/" class="back-button">Back to WhisperBin</a>
 
-        <footer>
-            Your secrets, shared safely &mdash; one time only
-        </footer>
+            {{ template "footer" . }}
+
     </main>
 
     <script>
         function copyToClipboard(elementId, buttonId) {
-            const text = document.getElementById(elementId).value;
+            const text = document.getElementById(elementId).value
             navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById(buttonId);
-                btn.textContent = "Copied";
+                const btn = document.getElementById(buttonId)
+                btn.textContent = "Copied"
                 setTimeout(() => {
-                    btn.textContent = "Copy";
-                }, 1500);
-            });
+                    btn.textContent = "Copy"
+                }, 1500)
+            })
         }
     </script>
 </body>
