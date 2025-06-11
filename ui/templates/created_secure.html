@@ -13,10 +13,14 @@
                 .then(res => res.ok ? res.json() : null)
                 .then(data => {
                     if (data && data.waiting) {
-                        document.getElementById("waiting").style.display = "block"
-                        document.getElementById("unlock").disabled = false
+                        document.getElementById("waiting").style.display = "block";
+                        document.getElementById("received").style.display = "none";
+                        document.getElementById("unlock").disabled = false;
+                    } else if (data) {
+                        document.getElementById("waiting").style.display = "none";
+                        document.getElementById("received").style.display = "block";
                     }
-                })
+                });
         }
         setInterval(pollStatus, 1000);
     </script>
@@ -45,6 +49,10 @@
 
         <div id="waiting" style="display:none;">
             <p><strong>Recipient is waiting for approval…</strong></p>
+        </div>
+
+        <div id="received" style="display:none;">
+            <p><strong>✅ Secret was received.</strong></p>
         </div>
 
         <footer>

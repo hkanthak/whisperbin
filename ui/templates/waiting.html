@@ -10,9 +10,10 @@
     <script>
         const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
         socket.onmessage = function (event) {
-            document.getElementById("secret").textContent = event.data
+            document.getElementById("secret").value = event.data
             document.getElementById("status").style.display = "none"
             document.getElementById("content").style.display = "block"
+            document.getElementById("heading").textContent = "Secret";
         }
     </script>
 </head>
@@ -22,7 +23,7 @@
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
-        <h2>Waiting for sender…</h2>
+        <h2 id="heading">Waiting for sender…</h2>
 
         <p><strong>Your passcode:</strong> {{.Code}}</p>
 
@@ -32,13 +33,47 @@
 
         <div id="content" style="display: none;">
             <p><strong>Secret:</strong></p>
-            <pre id="secret"></pre>
+
+            <div class="secret-field">
+                <input type="password" id="secret" readonly>
+
+                <div class="secret-actions">
+                    <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
+                    <button type="button" onclick="copySecret()" id="copy-btn">Copy</button>
+                </div>
+            </div>
         </div>
 
         <footer>
             Your secrets, shared safely &mdash; one time only
         </footer>
     </main>
+
+    <script>
+        function toggleSecret() {
+            const input = document.getElementById("secret");
+            const btn = document.getElementById("toggle-btn");
+
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "Hide";
+            } else {
+                input.type = "password";
+                btn.textContent = "Show";
+            }
+        }
+
+        function copySecret() {
+            const text = document.getElementById("secret").value;
+            navigator.clipboard.writeText(text).then(() => {
+                const copyBtn = document.getElementById("copy-btn");
+                copyBtn.textContent = "Copied";
+                setTimeout(() => {
+                    copyBtn.textContent = "Copy";
+                }, 1500);
+            });
+        }
+    </script>
 </body>
 
 </html>

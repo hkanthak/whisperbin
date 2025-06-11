@@ -16,11 +16,18 @@
         </a>
         <form action="/secret" method="post">
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-            <textarea id="secret" name="secret" rows="2" placeholder="Paste your secret here" required></textarea>
 
-            <label for="ttl">Time to live (TTL) in minutes</label>
-            <input id="ttl" type="number" name="ttl" placeholder="Default 10" min="1" max="1440">
+            <div class="secret-field">
+                <input type="password" id="secret" name="secret" placeholder="Paste your secret here" required>
 
+                <div class="secret-actions">
+                    <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
+                </div>
+            </div>
+
+            <label for="ttl">Time to live (TTL) in minutes
+                <input id="ttl" type="number" name="ttl" placeholder="Default 10" min="1" max="1440">
+            </label>
             <label for="secure">
                 <input id="secure" type="checkbox" name="secure">
                 Secure Mode: Require manual approval
@@ -34,6 +41,21 @@
             Your secrets, shared safely &mdash; one time only
         </footer>
     </main>
+
+    <script>
+        function toggleSecret() {
+            const input = document.getElementById("secret")
+            const btn = document.getElementById("toggle-btn")
+
+            if (input.type === "password") {
+                input.type = "text"
+                btn.textContent = "Hide"
+            } else {
+                input.type = "password"
+                btn.textContent = "Show"
+            }
+        }
+    </script>
 </body>
 
 </html>

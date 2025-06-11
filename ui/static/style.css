@@ -9,7 +9,7 @@ body {
     background-color: #fcf7ef;
 }
 
-body > main {
+body>main {
     padding: 0;
 }
 
@@ -31,12 +31,14 @@ p {
     margin-bottom: 0.8rem;
 }
 
-a, a:visited {
+a,
+a:visited {
     color: #4b97c4;
     word-break: break-word;
 }
 
-a:hover, a:active {
+a:hover,
+a:active {
     color: #3a85b2;
 }
 
@@ -51,10 +53,31 @@ button:hover {
     border-color: #3a85b2;
 }
 
+form {
+    margin-bottom: .75rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+textarea {
+    background-color: #fff;
+}
+
 input:focus,
 textarea:focus {
     border-color: #4b97c4;
     box-shadow: 0 0 0 0.1rem rgba(75, 151, 196, 0.25);
+}
+
+input[type="checkbox"] {
+    accent-color: #4b97c4;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+input[type="checkbox"]:not(:checked) {
+    background-color: #fff;
 }
 
 pre {
@@ -82,23 +105,57 @@ footer {
 }
 
 .art-image {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     width: 100%;
     height: auto;
 }
 
-input[type="text"],
-input[type="number"],
-textarea {
-    background-color: #fff;
-}
-
-input[type="checkbox"] {
-    accent-color: #4b97c4;
-    cursor: pointer;
-}
-
 .title-image {
-  max-height: 5rem;
-  margin-bottom: 1rem;;
+    max-height: 5rem;
+    margin-bottom: 1rem;
+}
+
+.secret-field {
+    position: relative;
+    width: 100%;
+}
+
+.secret-field input {
+    width: 100%;
+    padding-right: 5.5rem;
+    padding-left: 0.5rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.secret-actions {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.secret-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: #4b97c4;
+    padding: 0;
+    line-height: 1;
+    min-width: 2.5rem;
+    text-align: center;
+}
+
+.secret-actions button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+label[for="secure"] {
+    margin-bottom: 1rem;
 }
