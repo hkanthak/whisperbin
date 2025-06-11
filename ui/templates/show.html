@@ -17,22 +17,15 @@
 
             <p><strong>Your Secret:</strong></p>
 
-            <div class="secret-field">
-                <input type="password" id="secret" value="{{.}}" readonly>
-
-                <div class="secret-actions">
-                    <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
-                    <button type="button" onclick="copySecret()" id="copy-btn">Copy</button>
-                </div>
-            </div>
+            {{ template "secret_field" (dict "InputID" "secret" "Value" . "CopyButtonID" "copy-btn") }}
 
             <p>This secret has now been deleted.</p>
 
             <a href="/" class="back-button">Back to WhisperBin</a>
 
-            {{ template "footer" . }}
-
     </main>
+
+    {{ template "footer" . }}
 
     <script>
         function toggleSecret() {

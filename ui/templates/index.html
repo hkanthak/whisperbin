@@ -34,11 +34,13 @@
             </label>
 
             <button type="submit" class="contrast">Create One-Time Secret</button>
-            <img src="/static/art.png" alt="Artistic visual" class="art-image">
         </form>
-
-        {{ template "footer" . }}
+        <div class="art-container">
+            <img src="/static/art.png" alt="Artistic visual" class="art-image">
+        </div>
     </main>
+
+    {{ template "footer" . }}
 
     <script>
         function toggleSecret() {

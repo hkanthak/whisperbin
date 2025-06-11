@@ -3,17 +3,19 @@ html {
 }
 
 body {
-    padding: 1.2rem;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     background-color: #fcf7ef;
 }
 
 body>main {
     padding: 0;
+    padding-top: 1rem;
 }
 
 main {
+    min-height: 100vh;
     max-width: 400px;
     width: 100%;
     display: flex;
@@ -54,7 +56,8 @@ button:hover {
 }
 
 form {
-    margin-bottom: .75rem;
+    padding: 0 .5rem;
+    margin-bottom: 0rem;
     width: 100%;
 }
 
@@ -93,8 +96,10 @@ pre {
 
 footer {
     font-size: 0.85rem;
-    color: #666;
+    background-color: #38383a;
+    color: #fff;
     text-align: center;
+    padding: 1rem;
 }
 
 #waiting {
@@ -103,6 +108,19 @@ footer {
 
 #content {
     margin-top: 1rem;
+}
+
+.contrast {
+    margin-bottom: 0;
+}
+
+.art-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    width: 100%;
+    padding: 0 .5rem;
 }
 
 .art-image {
@@ -174,6 +192,11 @@ label[for="secure"] {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

@@ -34,14 +34,7 @@
 
         <p>Share this one-time link:</p>
 
-        <div class="secret-field" style="margin-bottom: 1rem;">
-            <input type="text" id="secret-link" value="{{.Link}}" readonly>
-
-            <div class="secret-actions">
-                <button type="button" onclick="copyToClipboard('secret-link', 'copy-link-btn')"
-                    id="copy-link-btn">Copy</button>
-            </div>
-        </div>
+        {{ template "link_field" (dict "InputID" "secret-link" "Value" .Link "CopyButtonID" "copy-link-btn") }}
 
         <p>This link works only once.</p>
 
@@ -61,9 +54,9 @@
         </div>
 
         <a href="/" class="back-button">Back to WhisperBin</a>
-
-        {{ template "footer" . }}
     </main>
+
+    {{ template "footer" . }}
 
     <script>
         function copyToClipboard(elementId, buttonId) {

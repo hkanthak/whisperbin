@@ -28,14 +28,9 @@
 
         <div id="passcode" style="margin-bottom: 1rem;">
             <p><strong>Your passcode:</strong></p>
-            <div class="secret-field">
-                <input type="text" id="passcode-value" value="{{.Code}}" readonly>
 
-                <div class="secret-actions">
-                    <button type="button" onclick="copyToClipboard('passcode-value', 'copy-passcode-btn')"
-                        id="copy-passcode-btn">Copy</button>
-                </div>
-            </div>
+            {{ template "link_field" (dict "InputID" "passcode-value" "Value" .Code "CopyButtonID" "copy-passcode-btn")
+            }}
         </div>
 
         <div id="status">
@@ -45,22 +40,16 @@
         <div id="content" style="display: none;">
             <p><strong id="heading">Your Secret:</strong></p>
 
-            <div class="secret-field">
-                <input type="password" id="secret" readonly>
-
-                <div class="secret-actions">
-                    <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
-                    <button type="button" onclick="copyToClipboard('secret', 'copy-btn')" id="copy-btn">Copy</button>
-                </div>
-            </div>
+            {{ template "secret_field" (dict "InputID" "secret" "Value" . "CopyButtonID" "copy-btn") }}
 
             <p>This secret has now been deleted.</p>
         </div>
 
         <a href="/" class="back-button">Back to WhisperBin</a>
 
-        {{ template "footer" . }}
     </main>
+
+    {{ template "footer" . }}
 
     <script>
         function toggleSecret() {

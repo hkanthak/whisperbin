@@ -30,7 +30,17 @@ func NewHandler(store *storage.Store) *Handler {
 }
 
 func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
-	tmpl := template.Must(template.ParseGlob(pattern))
+	tmpl := template.New("").Funcs(template.FuncMap{
+		"dict": func(values ...interface{}) map[string]interface{} {
+			dict := make(map[string]interface{}, len(values)/2)
+			for i := 0; i < len(values); i += 2 {
+				key, _ := values[i].(string)
+				dict[key] = values[i+1]
+			}
+			return dict
+		},
+	})
+	tmpl = template.Must(tmpl.ParseGlob(pattern))
 
 	allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
 	if allowedOrigin == "" {

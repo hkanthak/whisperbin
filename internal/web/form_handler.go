@@ -90,8 +90,6 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 			CSRFToken string
 		}{Link: link, ID: id, CSRFToken: token})
 	} else {
-		h.templates.ExecuteTemplate(w, "created.html", struct {
-			Link string
-		}{Link: link})
+		h.templates.ExecuteTemplate(w, "created.html", struct{ Link string }{Link: "/" + id})
 	}
 }
