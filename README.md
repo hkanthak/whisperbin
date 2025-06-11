@@ -4,6 +4,9 @@
   <img src="ui/static/title.png" alt="WhisperBin Banner" style="height:120px; max-width:100%;">
 </p>
 
+<p align="center">
+  <img src="https://github.com/hkanthak/whisperbin/actions/workflows/ci_rpi_image.yml/badge.svg" alt="Build Docker Image">
+</p>
 
 ## One-Time Secret Sharing Tool for Developers
 
@@ -87,9 +90,16 @@ go build -o whisperbin ./cmd/whisperbin
 
 You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 
-### Optional: Docker
+### Docker
 
-You can add a `Dockerfile` if desired (not included in this repo by default).
+A `Dockerfile` is included for building a container image:
+
+```bash
+docker build -t whisperbin .
+docker run -p 8080:8080 whisperbin
+```
+
+You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 
 ---
 
@@ -113,6 +123,16 @@ You can add a `Dockerfile` if desired (not included in this repo by default).
 ├── ui/static/                      # CSS, favicon, optional images
 └── README.md
 ```
+
+---
+
+## CI / GitHub Actions
+
+This repository includes a GitHub Actions workflow (`.github/workflows/ci_rpi_image.yml`) that builds a **Docker image optimized for Raspberry Pi (ARM architecture)** and can publish it to GitHub Container Registry.
+
+The resulting image runs well on Raspberry Pi 4 and compatible devices.
+
+You can adapt this workflow for your own deployment targets.
 
 ---
 
