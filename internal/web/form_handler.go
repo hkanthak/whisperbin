@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -80,12 +81,17 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Now().Add(10 * time.Minute),
 	})
 
+	link := fmt.Sprintf("%s/%s", h.allowedOrigin, id)
+
 	if secure {
 		h.templates.ExecuteTemplate(w, "created_secure.html", struct {
+			Link      string
 			ID        string
 			CSRFToken string
-		}{ID: id, CSRFToken: token})
+		}{Link: link, ID: id, CSRFToken: token})
 	} else {
-		h.templates.ExecuteTemplate(w, "created.html", "/"+id)
+		h.templates.ExecuteTemplate(w, "created.html", struct {
+			Link string
+		}{Link: link})
 	}
 }

@@ -7,40 +7,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
     <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <script>
         const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
         socket.onmessage = function (event) {
             document.getElementById("secret").value = event.data
             document.getElementById("status").style.display = "none"
-            document.getElementById("content").style.display = "block"
-            document.getElementById("heading").textContent = "Secret";
+            document.getElementById("passcode").style.display = "none"
+            const content = document.getElementById("content")
+            content.style.display = "block"
+            content.classList.add("fade-in")
+            document.getElementById("heading").textContent = "Unlocked! Your Secret:"
         }
     </script>
 </head>
 
 <body>
-    <main>
+    <main class="fade-in">
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
 
-        <p><strong>Your recipient passcode:</strong> {{.Code}}</p>
+        <div id="passcode" style="margin-bottom: 1rem;">
+            <p><strong>Your passcode:</strong></p>
+            <div class="secret-field">
+                <input type="text" id="passcode-value" value="{{.Code}}" readonly>
+
+                <div class="secret-actions">
+                    <button type="button" onclick="copyToClipboard('passcode-value', 'copy-passcode-btn')"
+                        id="copy-passcode-btn">Copy</button>
+                </div>
+            </div>
+        </div>
 
         <div id="status">
             <p>Waiting for sender to unlock…</p>
         </div>
 
         <div id="content" style="display: none;">
-            <p><strong>Your Secret:</strong></p>
+            <p><strong id="heading">Your Secret:</strong></p>
 
             <div class="secret-field">
                 <input type="password" id="secret" readonly>
 
                 <div class="secret-actions">
                     <button type="button" onclick="toggleSecret()" id="toggle-btn">Show</button>
-                    <button type="button" onclick="copySecret()" id="copy-btn">Copy</button>
+                    <button type="button" onclick="copyToClipboard('secret', 'copy-btn')" id="copy-btn">Copy</button>
                 </div>
             </div>
+
+            <p>This secret has now been deleted.</p>
         </div>
 
         <a href="/" class="back-button">Back to WhisperBin</a>
@@ -52,27 +68,27 @@
 
     <script>
         function toggleSecret() {
-            const input = document.getElementById("secret");
-            const btn = document.getElementById("toggle-btn");
+            const input = document.getElementById("secret")
+            const btn = document.getElementById("toggle-btn")
 
             if (input.type === "password") {
-                input.type = "text";
-                btn.textContent = "Hide";
+                input.type = "text"
+                btn.textContent = "Hide"
             } else {
-                input.type = "password";
-                btn.textContent = "Show";
+                input.type = "password"
+                btn.textContent = "Show"
             }
         }
 
-        function copySecret() {
-            const text = document.getElementById("secret").value;
+        function copyToClipboard(elementId, buttonId) {
+            const text = document.getElementById(elementId).value
             navigator.clipboard.writeText(text).then(() => {
-                const copyBtn = document.getElementById("copy-btn");
-                copyBtn.textContent = "Copied";
+                const btn = document.getElementById(buttonId)
+                btn.textContent = "Copied"
                 setTimeout(() => {
-                    copyBtn.textContent = "Copy";
-                }, 1500);
-            });
+                    btn.textContent = "Copy"
+                }, 1500)
+            })
         }
     </script>
 </body>

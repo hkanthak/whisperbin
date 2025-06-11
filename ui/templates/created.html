@@ -7,17 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
     <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 </head>
 
 <body>
-    <main>
+    <main class="fade-in">
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
 
-        <p>
-            <a rel="noopener noreferrer" target="_blank" href="{{.}}">{{.}}</a>
-        </p>
+        <p>Share this one-time link:</p>
+
+        <div class="secret-field" style="margin-bottom: 0.5rem;">
+            <input type="text" id="secret-link" value="{{.Link}}" readonly>
+
+            <div class="secret-actions">
+                <button type="button" onclick="copyToClipboard('secret-link', 'copy-link-btn')" id="copy-link-btn">Copy</button>
+            </div>
+        </div>
+
         <p>This link works only once.</p>
 
         <a href="/" class="back-button">Back to WhisperBin</a>
@@ -26,6 +34,19 @@
             Your secrets, shared safely &mdash; one time only
         </footer>
     </main>
+
+    <script>
+        function copyToClipboard(elementId, buttonId) {
+            const text = document.getElementById(elementId).value;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById(buttonId);
+                btn.textContent = "Copied";
+                setTimeout(() => {
+                    btn.textContent = "Copy";
+                }, 1500);
+            });
+        }
+    </script>
 </body>
 
 </html>

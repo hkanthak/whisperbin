@@ -55,6 +55,7 @@ button:hover {
 
 form {
     margin-bottom: .75rem;
+    width: 100%;
 }
 
 input[type="text"],
@@ -111,7 +112,7 @@ footer {
 }
 
 .title-image {
-    max-height: 5rem;
+    width: 185px;
     margin-bottom: 1rem;
 }
 
@@ -166,4 +167,13 @@ label[for="secure"] {
     margin-top: 1.2rem;
     text-decoration: none;
     cursor: pointer;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

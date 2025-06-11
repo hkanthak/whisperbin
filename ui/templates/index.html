@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
     <link href="/static/style.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 </head>
 
 <body>
-    <main>
+    <main class="fade-in">
         <a href="/">
             <img src="/static/title.png" alt="Artistic visual" class="title-image">
         </a>
@@ -30,7 +31,7 @@
             </label>
             <label for="secure">
                 <input id="secure" type="checkbox" name="secure">
-                 Secure Mode (manual approval)
+                Secure Mode (manual approval)
             </label>
 
             <button type="submit" class="contrast">Create One-Time Secret</button>
