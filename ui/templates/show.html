@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Secret</title>
+    <title>WhisperBin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
 </head>
-<body style="font-family: system-ui; max-width: 600px; margin: 3em auto; text-align: center;">
-    <h1>Secret:</h1>
-    <pre>{{.}}</pre>
-    <p>This message has now been deleted.</p>
+
+<body>
+    <main>
+        <a href="/">
+            <img src="/static/title.png" alt="Artistic visual" class="title-image">
+        </a>
+        <h2>Secret:</h2>
+
+        <pre>{{.}}</pre>
+
+        <p>This message has now been deleted.</p>
+
+        <footer>
+            Your secrets, shared safely &mdash; one time only
+        </footer>
+    </main>
 </body>
+
 </html>

@@ -61,12 +61,13 @@ func extractIP(r *http.Request) string {
 
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
-
-	mux.HandleFunc("/", h.formHandler)
+	fs := http.FileServer(http.Dir(projectRootPath("ui/static")))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 	mux.HandleFunc("/secret", h.rateLimit(h.createHandler))
 	mux.HandleFunc("/confirm/", h.rateLimit(h.confirmHandler))
 	mux.HandleFunc("/status/", h.rateLimit(h.statusHandler))
 	mux.HandleFunc("/ws", h.rateLimit(h.WebSocketHandler))
+	mux.HandleFunc("/", h.formHandler)
 
 	return mux
 }

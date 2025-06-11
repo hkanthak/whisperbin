@@ -2,36 +2,43 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>WhisperBin – Waiting</title>
-  <script>
-    const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
-    socket.onmessage = function (event) {
-      document.getElementById("secret").textContent = event.data
-      document.getElementById("status").style.display = "none"
-      document.getElementById("content").style.display = "block"
-    };
-  </script>
+    <meta charset="UTF-8">
+    <title>WhisperBin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+    <script>
+        const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
+        socket.onmessage = function (event) {
+            document.getElementById("secret").textContent = event.data
+            document.getElementById("status").style.display = "none"
+            document.getElementById("content").style.display = "block"
+        }
+    </script>
 </head>
 
-<body style="font-family: system-ui; max-width: 600px; margin: 3em auto; text-align: center;">
-  <h1>Waiting for sender…</h1>
-  <p><strong>Your passcode:</strong> {{.Code}}</p>
-  <div id="status">
-    <p>Please wait while the sender unlocks your secret.</p>
-  </div>
-  <div id="content" style="display: none;">
-    <p><strong>Secret:</strong></p>
-    <pre id="secret" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 1em;"></pre>
-    <button onclick="copySecret()">Copy</button>
-  </div>
+<body>
+    <main>
+        <a href="/">
+            <img src="/static/title.png" alt="Artistic visual" class="title-image">
+        </a>
+        <h2>Waiting for sender…</h2>
 
-  <script>
-    function copySecret() {
-      const text = document.getElementById("secret").textContent
-      navigator.clipboard.writeText(text)
-    }
-  </script>
+        <p><strong>Your passcode:</strong> {{.Code}}</p>
+
+        <div id="status">
+            <p>Please wait while the sender unlocks your secret.</p>
+        </div>
+
+        <div id="content" style="display: none;">
+            <p><strong>Secret:</strong></p>
+            <pre id="secret"></pre>
+        </div>
+
+        <footer>
+            Your secrets, shared safely &mdash; one time only
+        </footer>
+    </main>
 </body>
 
 </html>
