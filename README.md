@@ -1,10 +1,17 @@
-# WhisperBin
 
-**Minimalist one-time secret sharing tool**
 
-WhisperBin is a secure web application for sharing short text snippets (such as tokens, SSH keys or passwords) via links that can be viewed **exactly once**. After retrieval, secrets are deleted automatically.
+<p align="center">
+  <img src="ui/static/title.png" alt="WhisperBin Banner" style="height:120px; max-width:100%;">
+</p>
 
-It is built in Go with server-side rendered HTML templates and optimized for simplicity, privacy and technical transparency.
+
+## One-Time Secret Sharing Tool for Developers
+
+WhisperBin is a secure web application for sharing short text snippets (such as tokens, SSH keys, or passwords) via links that can be viewed **exactly once**. After retrieval, secrets are deleted automatically.
+
+It is built in Go with server-side rendered HTML templates and optimized for simplicity, privacy, and technical transparency.
+
+---
 
 ## Features
 
@@ -18,17 +25,21 @@ It is built in Go with server-side rendered HTML templates and optimized for sim
 - Per-IP rate limiting
 - Minimal and clean UI, no JS frameworks required
 
-## Usage flow
+---
+
+## Usage Flow
 
 1. User submits a secret via `/` form.
-2. WhisperBin generates a random ID and stores the encrypted secret in-memory.
+2. WhisperBin generates a random ID and stores the encrypted secret in memory.
 3. A one-time link is generated: `https://yourhost/{id}`
 4. The recipient visits the link:
    - If secure mode is enabled: recipient requests approval with a passcode.
    - Otherwise: secret is shown and immediately deleted.
 5. The link is invalid after first use or after TTL expiration.
 
-## Tech stack
+---
+
+## Tech Stack
 
 - **Backend**: Go (net/http, crypto/rand, html/template)
 - **Frontend**: HTML templates (SSR)
@@ -41,7 +52,9 @@ It is built in Go with server-side rendered HTML templates and optimized for sim
   - `GET /status/{id}` — Status polling (secure mode)
   - `GET /ws?id={id}` — WebSocket delivery (secure mode)
 
-## Security design
+---
+
+## Security Design
 
 - **Random IDs**: 128-bit, securely generated with `crypto/rand`
 - **Encryption**: AES-GCM with per-instance 256-bit key
@@ -52,7 +65,9 @@ It is built in Go with server-side rendered HTML templates and optimized for sim
 - **CSRF**: All forms protected with CSRF tokens
 - **No sensitive logging**: No storage of secret content or access logs
 
-## Running locally
+---
+
+## Running Locally
 
 ```bash
 git clone https://github.com/yourusername/whisperbin.git
@@ -62,7 +77,9 @@ go run ./cmd/whisperbin
 
 Access via: [http://localhost:8080](http://localhost:8080)
 
-## Build & deploy
+---
+
+## Build & Deploy
 
 ```bash
 go build -o whisperbin ./cmd/whisperbin
@@ -74,6 +91,8 @@ You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 
 You can add a `Dockerfile` if desired (not included in this repo by default).
 
+---
+
 ## Configuration
 
 | Environment Variable | Description                                                                                     |
@@ -81,7 +100,9 @@ You can add a `Dockerfile` if desired (not included in this repo by default).
 | `SECRET_KEY`         | Optional 32-byte base64-encoded encryption key. If unset, a random key is generated at startup. |
 | `ALLOWED_ORIGIN`     | Allowed origin for WebSocket connections. Default: `http://localhost:8080`.                     |
 
-## Project structure
+---
+
+## Project Structure
 
 ```
 .
@@ -93,9 +114,19 @@ You can add a `Dockerfile` if desired (not included in this repo by default).
 └── README.md
 ```
 
+---
+
+## Screenshot
+
+![WhisperBin Screenshot](ui/static/screenshot.png)
+
+---
+
 ## Limitations / Disclaimer
 
 WhisperBin is a minimal proof-of-concept for safe sharing of secrets in technical contexts. It is provided **as-is** without warranty. Do not use it for highly sensitive production data without independent security review.
+
+---
 
 ## License
 
