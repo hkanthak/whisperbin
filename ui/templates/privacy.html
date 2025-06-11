@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Privacy Policy – WhisperBin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1.5.10/css/pico.min.css" rel="stylesheet">
+  <link href="/static/style.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+</head>
+
+<body>
+  <main class="fade-in">
+    {{ template "header" . }}
+
+    <div class="privacy-policy">
+      <h2>Privacy Policy</h2>
+
+      <p>WhisperBin is a minimal tool designed for one-time, secure sharing of text snippets. We respect your privacy
+        and limit data processing to the absolute minimum required to provide this service.</p>
+
+      <h3>Data Collection</h3>
+      <p>We do not collect any personal data beyond what you explicitly submit via the WhisperBin form.</p>
+      <ul>
+        <li>Secrets are encrypted in memory and are deleted automatically after the first access or after their
+          expiration.</li>
+        <li>We do not log the contents of any secret.</li>
+        <li>IP addresses may be temporarily processed in-memory solely for rate limiting purposes. They are not stored
+          persistently or linked to any other data.</li>
+        <li>No cookies are used except for an ephemeral CSRF token cookie, required for security. This cookie is not
+          used for tracking or identification.</li>
+      </ul>
+
+      <h3>Third-Party Services</h3>
+      <p>We do not use any third-party analytics, tracking services, or advertising networks.</p>
+
+      <h3>Legal Basis</h3>
+      <p>We process your submitted data based on your explicit request (Article 6(1)(b) GDPR). No profiling or further
+        processing is performed.</p>
+
+      <h3>Your Rights</h3>
+      <p>As we do not persist your data beyond the intended one-time use, no personal data is stored that can be
+        retrieved, corrected, or deleted beyond this mechanism. For inquiries regarding data protection, please contact
+        the operator of this instance.</p>
+
+      <h3>Changes</h3>
+      <p>This privacy policy may be updated to reflect changes in functionality or legal requirements. The current
+        version will always be available on this page.</p>
+
+      <h3>Operator Information</h3>
+      <p>This service is operated by the entity or individual hosting this instance of WhisperBin. For inquiries
+        regarding this deployment, please contact the operator of the instance.</p>
+
+      <a href="/" class="back-button">Back to WhisperBin</a>
+    </div>
+
+  </main>
+
+  {{ template "footer" . }}
+
+</body>
+
+</html>

@@ -97,3 +97,12 @@ func (h *Handler) renderSuccess(w http.ResponseWriter, title string, message str
 		Message: message,
 	})
 }
+
+func (h *Handler) privacyHandler(w http.ResponseWriter, r *http.Request) {
+	data := struct {
+		EffectiveDate string
+	}{
+		EffectiveDate: "June 2025",
+	}
+	h.templates.ExecuteTemplate(w, "privacy.html", data)
+}
