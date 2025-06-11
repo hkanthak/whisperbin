@@ -146,14 +146,12 @@ func (s *Store) WaitForUnlock(id string) (*Secret, error) {
 		s.mu.Unlock()
 		return nil, errors.New("not found or expired")
 	}
-	if sec.WaitingCh == nil {
+
+	if err := s.canWait(sec); err != nil {
 		s.mu.Unlock()
-		return nil, errors.New("not secure mode")
+		return nil, err
 	}
-	if sec.listenerSet {
-		s.mu.Unlock()
-		return nil, errors.New("listener already connected")
-	}
+
 	sec.listenerSet = true
 	ch := sec.WaitingCh
 	s.mu.Unlock()
@@ -236,4 +234,14 @@ func (s *Store) isBlocked(id, ip string) bool {
 		return false
 	}
 	return true
+}
+
+func (s *Store) canWait(sec *Secret) error {
+	if sec.WaitingCh == nil {
+		return errors.New("not secure mode")
+	}
+	if sec.listenerSet {
+		return errors.New("listener already connected")
+	}
+	return nil
 }
