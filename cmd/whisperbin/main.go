@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"whisperbin/internal"
 	"whisperbin/internal/storage"
 	"whisperbin/internal/web"
 )
@@ -14,7 +15,7 @@ func main() {
 	handler := web.NewHandler(store)
 
 	go func() {
-		ticker := time.NewTicker(5 * time.Minute)
+		ticker := time.NewTicker(internal.CleanupInterval)
 		defer ticker.Stop()
 		for range ticker.C {
 			store.CleanupExpired()

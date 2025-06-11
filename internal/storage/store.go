@@ -8,6 +8,8 @@ import (
 	"os"
 	"sync"
 	"time"
+
+	"whisperbin/internal"
 )
 
 type Store struct {
@@ -202,12 +204,13 @@ func (s *Store) incrementFailure(id, ip string) {
 		s.confirmFailures[id] = make(map[string]int)
 	}
 	s.confirmFailures[id][ip]++
-	if s.confirmFailures[id][ip] >= 5 {
+	if s.confirmFailures[id][ip] >= internal.MaxCodeFailures {
 		if s.confirmBlockedAt[id] == nil {
 			s.confirmBlockedAt[id] = make(map[string]time.Time)
 		}
-		s.confirmBlockedAt[id][ip] = time.Now().Add(1 * time.Minute)
+		s.confirmBlockedAt[id][ip] = time.Now().Add(internal.BlockDuration)
 	}
+
 }
 
 func (s *Store) resetFailures(id, ip string) {

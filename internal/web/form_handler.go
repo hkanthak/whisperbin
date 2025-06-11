@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"whisperbin/internal"
 )
 
 func (h *Handler) formHandler(w http.ResponseWriter, r *http.Request) {
@@ -51,11 +53,11 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ttl := 10
-	if ttl < 1 {
-		ttl = 1
-	} else if ttl > 1440 {
-		ttl = 1440
+	ttl := internal.DefaultTTLMinutes
+	if ttl < internal.MinTTLMinutes {
+		ttl = internal.MinTTLMinutes
+	} else if ttl > internal.MaxTTLMinutes {
+		ttl = internal.MaxTTLMinutes
 	}
 	secure := r.FormValue("secure") == "on"
 

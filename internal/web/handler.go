@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"whisperbin/internal"
 	"whisperbin/internal/storage"
 )
 
@@ -32,7 +33,7 @@ func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
 		allowedOrigin = "http://localhost:8080"
 	}
 
-	ipLimiter := newIPLimiter(5, 10)
+	ipLimiter := newIPLimiter(internal.RateLimiterRate, internal.RateLimiterBurst)
 
 	return &Handler{
 		store:         store,
