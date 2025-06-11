@@ -1,6 +1,7 @@
 package web
 
 import (
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -67,7 +68,9 @@ func TestGetHandler_SecureModeWait(t *testing.T) {
 
 func readBody(t *testing.T, r *http.Response) string {
 	t.Helper()
-	buf := make([]byte, r.ContentLength)
-	r.Body.Read(buf)
-	return string(buf)
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		t.Fatalf("failed to read response body: %v", err)
+	}
+	return string(body)
 }
