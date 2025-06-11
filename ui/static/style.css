@@ -97,9 +97,12 @@ pre {
 footer {
     font-size: 0.85rem;
     background-color: #38383a;
-    color: #fff;
     text-align: center;
     padding: 1rem;
+}
+
+.footer-text {
+    color: #fff
 }
 
 #waiting {
@@ -185,6 +188,10 @@ label[for="secure"] {
     margin-top: 1.2rem;
     text-decoration: none;
     cursor: pointer;
+}
+
+.privacy-policy {
+    margin-bottom: 1rem;
 }
 
 .fade-in {
