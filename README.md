@@ -45,7 +45,7 @@ It is built in Go with server-side rendered HTML templates and optimized for sim
 ## Tech Stack
 
 - **Backend**: Go (net/http, crypto/rand, html/template)
-- **Frontend**: HTML templates (SSR)
+- **Frontend**: HTML templates (SSR) with [Pico.css](https://picocss.com/) for minimal styling
 - **Storage**: In-memory map (sync.Mutex protected)
 - **Routing**:
   - `GET /` — Submit secret form
