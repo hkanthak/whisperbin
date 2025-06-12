@@ -16,6 +16,14 @@ It is built in Go with server-side rendered HTML templates and optimized for sim
 
 ---
 
+## Why I built WhisperBin
+
+As a Kotlin developer, I like exploring new programming languages. Go is well suited for building small, fast server applications, and this project was a good way to try it out.
+
+WhisperBin is designed to be lightweight and easy to run, for example on a Raspberry Pi in a home network. I use it to share passwords and other secrets between different devices.
+
+---
+
 ## Features
 
 - One-time retrieval (secret deleted on first access)
