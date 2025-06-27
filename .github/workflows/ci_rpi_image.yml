@@ -1,4 +1,4 @@
-name: Test, Build and Release Precompiled Image for Raspberry Pi
+name: ARM Build & Release
 
 on:
   push:
