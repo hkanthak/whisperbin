@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img src="ui/static/title.png" alt="WhisperBin Banner" style="height:120px; max-width:100%;">
+  <img src="ui/static/title.png" alt="WhisperBin Banner" height:"120">
 </p>
 
 <p align="center">
