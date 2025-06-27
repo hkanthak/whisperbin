@@ -5,7 +5,17 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/hkanthak/whisperbin/actions/workflows/ci_rpi_image.yml/badge.svg" alt="Build Docker Image">
+  <a href="https://github.com/hkanthak/whisperbin/actions/workflows/ci_rpi_image.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/hkanthak/whisperbin/ci_rpi_image.yml?style=flat&label=ARM%20Build&color=brightgreen" alt="CI Build">
+  </a>
+  <a href="https://github.com/hkanthak/whisperbin/pkgs/container/whisperbin">
+    <img src="https://img.shields.io/badge/Docker-Image-4b97c4?logo=docker&logoColor=white" alt="Docker Image">
+  </a>
+  <img src="https://img.shields.io/github/go-mod/go-version/hkanthak/whisperbin?color=4b97c4" alt="Go Version">
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/hkanthak/whisperbin?label=License&color=4b97c4" alt="License">
+  </a>
+  <img src="https://img.shields.io/github/last-commit/hkanthak/whisperbin?label=Last%20Commit&color=4b97c4" alt="Last Commit">
 </p>
 
 ## One-Time Secret Sharing Tool for Developers
