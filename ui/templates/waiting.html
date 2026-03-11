@@ -9,15 +9,25 @@
     <link href="/static/style.css" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <script>
-        const socket = new WebSocket("ws://" + location.host + "/ws?id={{.ID}}")
-        socket.onmessage = function (event) {
-            document.getElementById("secret").value = event.data
+        const evtSource = new EventSource("/sse?id={{.ID}}")
+        evtSource.onmessage = function (event) {
+            evtSource.close()
+            const data = event.data.replace(/\\n/g, '\n')
+            if (data.startsWith("error: ")) {
+                document.getElementById("status").textContent = data
+                return
+            }
+            document.getElementById("secret").value = data
             document.getElementById("status").style.display = "none"
             document.getElementById("passcode").style.display = "none"
             const content = document.getElementById("content")
             content.style.display = "block"
             content.classList.add("fade-in")
             document.getElementById("heading").textContent = "Unlocked! Your Secret:"
+        }
+        evtSource.onerror = function () {
+            evtSource.close()
+            document.getElementById("status").textContent = "Connection lost. Please refresh."
         }
     </script>
 </head>

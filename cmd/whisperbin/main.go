@@ -23,7 +23,6 @@ func main() {
 	}()
 
 	http.Handle("/", handler.Routes())
-	http.HandleFunc("/ws", handler.WebSocketHandler)
 
 	log.Println("Server running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
