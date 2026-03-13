@@ -71,7 +71,7 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
   - `GET /{id}` — Retrieve secret (once)
   - `POST /confirm/{id}` — Manual approval (secure mode)
   - `GET /status/{id}` — Status polling (secure mode)
-  - `GET /ws?id={id}` — WebSocket delivery (secure mode)
+  - `GET /sse?id={id}` — SSE delivery (secure mode)
 
 ---
 
@@ -81,7 +81,7 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
 - **Encryption**: AES-GCM with per-instance 256-bit key
 - **One-time access**: Secret is deleted after first view
 - **TTL support**: Expired secrets are automatically purged
-- **Secure mode**: Optional manual recipient approval via passcode + WebSocket unlock flow
+- **Secure mode**: Optional manual recipient approval via passcode + SSE unlock flow
 - **Rate limiting**: Per-IP rate limiting implemented (golang.org/x/time/rate)
 - **CSRF**: All forms protected with CSRF tokens
 - **No sensitive logging**: No storage of secret content or access logs
@@ -126,7 +126,7 @@ You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 | Environment Variable | Description                                                                                     |
 | -------------------- | ----------------------------------------------------------------------------------------------- |
 | `SECRET_KEY`         | Optional 32-byte base64-encoded encryption key. If unset, a random key is generated at startup. |
-| `ALLOWED_ORIGIN`     | Allowed origin for WebSocket connections. Default: `http://localhost:8080`.                     |
+| `ALLOWED_ORIGIN`     | Allowed origin for SSE connections. Default: `http://localhost:8080`.                           |
 
 ---
 
