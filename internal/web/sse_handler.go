@@ -8,9 +8,6 @@ import (
 )
 
 func (h *Handler) SSEHandler(w http.ResponseWriter, r *http.Request) {
-	// Origin-Check: entspricht dem bisherigen CheckOrigin im WebSocket-Upgrader.
-	// Requests ohne Origin-Header (z. B. direkte Server-zu-Server-Calls) werden
-	// durchgelassen, wie gorilla/websocket es bei fehlendem Header ebenfalls tat.
 	if origin := r.Header.Get("Origin"); origin != "" && origin != h.allowedOrigin {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
@@ -31,7 +28,7 @@ func (h *Handler) SSEHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
-	w.Header().Set("X-Accel-Buffering", "no") // Proxy-Buffering (nginx) deaktivieren
+	w.Header().Set("X-Accel-Buffering", "no")
 
 	sec, err := h.store.WaitForUnlock(id)
 	if err != nil {
@@ -47,8 +44,6 @@ func (h *Handler) SSEHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Zeilenumbrüche enkodieren: SSE interpretiert \n als Feld-Trennzeichen.
-	// Der Client dekodiert \\n wieder zurück zu \n.
 	text = strings.ReplaceAll(text, "\n", "\\n")
 	text = html.EscapeString(text)
 
