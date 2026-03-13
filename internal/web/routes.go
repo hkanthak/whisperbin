@@ -67,7 +67,7 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("/secret", h.rateLimit(h.createHandler))
 	mux.HandleFunc("/confirm/", h.rateLimit(h.confirmHandler))
 	mux.HandleFunc("/status/", h.rateLimit(h.statusHandler))
-	mux.HandleFunc("/ws", h.rateLimit(h.WebSocketHandler))
+	mux.HandleFunc("/sse", h.rateLimit(h.SSEHandler))
 	mux.HandleFunc("/", h.formHandler)
 
 	return mux
