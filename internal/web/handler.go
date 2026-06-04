@@ -18,6 +18,7 @@ type Handler struct {
 	templates     *template.Template
 	allowedOrigin string
 	ipLimiter     *ipLimiter
+	trustProxy    bool
 }
 
 func NewHandler(store *storage.Store) *Handler {
@@ -54,6 +55,7 @@ func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
 		templates:     tmpl,
 		allowedOrigin: allowedOrigin,
 		ipLimiter:     ipLimiter,
+		trustProxy:    os.Getenv("TRUST_PROXY") == "true",
 	}
 }
 

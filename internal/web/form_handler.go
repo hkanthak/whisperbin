@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -52,6 +53,11 @@ func (h *Handler) createHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ttl := internal.DefaultTTLMinutes
+	if v := strings.TrimSpace(r.FormValue("ttl")); v != "" {
+		if parsed, err := strconv.Atoi(v); err == nil {
+			ttl = parsed
+		}
+	}
 	if ttl < internal.MinTTLMinutes {
 		ttl = internal.MinTTLMinutes
 	} else if ttl > internal.MaxTTLMinutes {

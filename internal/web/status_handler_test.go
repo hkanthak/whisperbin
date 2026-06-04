@@ -1,6 +1,7 @@
 package web
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -40,7 +41,7 @@ func TestStatusHandler_WaitingTrue(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	go store.WaitForUnlock(id)
+	go store.WaitForUnlock(context.Background(), id)
 
 	tmpl := projectRootPath("ui/templates/*.html")
 	h := NewHandlerWithTemplates(store, tmpl)
