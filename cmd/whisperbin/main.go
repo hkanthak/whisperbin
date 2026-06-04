@@ -25,9 +25,8 @@ func main() {
 	srv := &http.Server{
 		Addr:              ":8080",
 		Handler:           handler.Routes(),
-		ReadHeaderTimeout: 5 * time.Second,
-		ReadTimeout:       15 * time.Second,
-		IdleTimeout:       60 * time.Second,
+		ReadHeaderTimeout: 10 * time.Second,
+		IdleTimeout:       120 * time.Second,
 	}
 
 	log.Println("Server running at http://localhost:8080")

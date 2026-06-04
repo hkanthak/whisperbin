@@ -52,7 +52,7 @@ Addressed on branch `review/fixes`:
 
 - Goroutine leak in secure-mode delivery: `WaitForUnlock` now takes a `context.Context` and selects on cancellation and TTL, and resets the listener flag so a dropped SSE connection can reconnect.
 - The TTL form value is now parsed and clamped (it was previously ignored, always defaulting to 10 minutes).
-- The HTTP server now sets read/idle timeouts (and intentionally no `WriteTimeout`, to keep long-lived SSE connections alive).
+- The HTTP server now sets `ReadHeaderTimeout` and `IdleTimeout` (intentionally no `ReadTimeout`/`WriteTimeout`, so long-lived secure-mode SSE connections are not cut off mid-wait).
 - Client IP behind a reverse proxy via `TRUST_PROXY`.
 
 Still open (low severity):
