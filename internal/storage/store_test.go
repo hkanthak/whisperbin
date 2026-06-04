@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"testing"
 	"time"
 )
@@ -33,7 +34,7 @@ func TestStore_SecureFlow(t *testing.T) {
 
 	go func() {
 		listenerReady <- struct{}{}
-		got, err := store.WaitForUnlock(id)
+		got, err := store.WaitForUnlock(context.Background(), id)
 		if err != nil {
 			t.Errorf("WaitForUnlock failed: %v", err)
 			return

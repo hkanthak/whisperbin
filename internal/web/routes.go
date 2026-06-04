@@ -38,7 +38,7 @@ func (l *ipLimiter) getLimiter(ip string) *rate.Limiter {
 
 func (h *Handler) rateLimit(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip := extractIP(r)
+		ip := h.clientIP(r)
 		limiter := h.ipLimiter.getLimiter(ip)
 		if !limiter.Allow() {
 			http.Error(w, "Too Many Requests", http.StatusTooManyRequests)
@@ -48,7 +48,17 @@ func (h *Handler) rateLimit(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func extractIP(r *http.Request) string {
+func (h *Handler) clientIP(r *http.Request) string {
+	if h.trustProxy {
+		if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
+			if first := strings.TrimSpace(strings.Split(xff, ",")[0]); first != "" {
+				return first
+			}
+		}
+		if real := strings.TrimSpace(r.Header.Get("X-Real-IP")); real != "" {
+			return real
+		}
+	}
 	ip := r.RemoteAddr
 	if ip == "" {
 		return ""

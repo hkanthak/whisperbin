@@ -30,7 +30,7 @@ func (h *Handler) SSEHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("X-Accel-Buffering", "no")
 
-	sec, err := h.store.WaitForUnlock(id)
+	sec, err := h.store.WaitForUnlock(r.Context(), id)
 	if err != nil {
 		fmt.Fprintf(w, "data: error: %s\n\n", err.Error())
 		flusher.Flush()

@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/subtle"
 	"encoding/base64"
@@ -139,7 +140,7 @@ func (s *Store) Confirm(id, inputCode, ip string) error {
 	return nil
 }
 
-func (s *Store) WaitForUnlock(id string) (*Secret, error) {
+func (s *Store) WaitForUnlock(ctx context.Context, id string) (*Secret, error) {
 	s.mu.Lock()
 	sec, ok := s.secrets[id]
 	if !ok || time.Now().After(sec.ExpiresAt) {
@@ -154,10 +155,30 @@ func (s *Store) WaitForUnlock(id string) (*Secret, error) {
 
 	sec.listenerSet = true
 	ch := sec.WaitingCh
+	expiresAt := sec.ExpiresAt
 	s.mu.Unlock()
 
-	<-ch
-	return sec, nil
+	timer := time.NewTimer(time.Until(expiresAt))
+	defer timer.Stop()
+
+	select {
+	case <-ch:
+		return sec, nil
+	case <-ctx.Done():
+		s.releaseListener(id)
+		return nil, ctx.Err()
+	case <-timer.C:
+		s.releaseListener(id)
+		return nil, errors.New("not found or expired")
+	}
+}
+
+func (s *Store) releaseListener(id string) {
+	s.mu.Lock()
+	if sec, ok := s.secrets[id]; ok {
+		sec.listenerSet = false
+	}
+	s.mu.Unlock()
 }
 
 func (s *Store) DecryptSecretText(sec *Secret) (string, error) {

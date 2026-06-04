@@ -18,7 +18,7 @@ func (h *Handler) confirmHandler(w http.ResponseWriter, r *http.Request) {
 
 	id := strings.TrimPrefix(r.URL.Path, "/confirm/")
 	code := strings.TrimSpace(r.FormValue("code"))
-	ip := extractIP(r)
+	ip := h.clientIP(r)
 
 	err := h.store.Confirm(id, code, ip)
 	if err != nil {

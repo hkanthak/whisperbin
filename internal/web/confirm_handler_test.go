@@ -1,6 +1,7 @@
 package web
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -68,7 +69,7 @@ func TestConfirmHandler_ValidCode(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	go store.WaitForUnlock(id)
+	go store.WaitForUnlock(context.Background(), id)
 
 	tmpl := projectRootPath("ui/templates/*.html")
 	h := NewHandlerWithTemplates(store, tmpl)
