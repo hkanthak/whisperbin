@@ -5,12 +5,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/hkanthak/whisperbin/actions/workflows/ci_rpi_image.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/hkanthak/whisperbin/ci_rpi_image.yml?style=flat&label=ARM%20Build&color=brightgreen" alt="CI Build">
-  </a>
-  <a href="https://github.com/hkanthak/whisperbin/pkgs/container/whisperbin">
-    <img src="https://img.shields.io/badge/Docker-Image-4b97c4?logo=docker&logoColor=white" alt="Docker Image">
-  </a>
   <img src="https://img.shields.io/github/go-mod/go-version/hkanthak/whisperbin?color=4b97c4" alt="Go Version">
   <a href="https://github.com/hkanthak/whisperbin/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/hkanthak/whisperbin?label=License&color=4b97c4" alt="License">
@@ -91,7 +85,7 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
 ## Running Locally
 
 ```bash
-git clone https://github.com/yourusername/whisperbin.git
+git clone https://github.com/hkanthak/whisperbin.git
 cd whisperbin
 go run ./cmd/whisperbin
 ```
@@ -106,18 +100,16 @@ Access via: [http://localhost:8080](http://localhost:8080)
 go build -o whisperbin ./cmd/whisperbin
 ```
 
-You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
-
 ### Docker
 
-A `Dockerfile` is included for building a container image:
+The included multi-stage `Dockerfile` builds from source — no prebuilt binary required:
 
 ```bash
 docker build -t whisperbin .
 docker run -p 8080:8080 whisperbin
 ```
 
-You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
+WhisperBin runs behind any TLS-terminating reverse proxy (Traefik, Nginx, Caddy). It can also be deployed straight from this Git repository by any Docker-based PaaS (e.g. Dokploy) that builds the image itself. Behind a proxy, set `ALLOWED_ORIGIN` to the public URL and `TRUST_PROXY=true`.
 
 ---
 
@@ -126,7 +118,8 @@ You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 | Environment Variable | Description                                                                                     |
 | -------------------- | ----------------------------------------------------------------------------------------------- |
 | `SECRET_KEY`         | Optional 32-byte base64-encoded encryption key. If unset, a random key is generated at startup. |
-| `ALLOWED_ORIGIN`     | Allowed origin for SSE connections. Default: `http://localhost:8080`.                           |
+| `ALLOWED_ORIGIN`     | Allowed origin for SSE connections and the base for generated links. Default: `http://localhost:8080`.          |
+| `TRUST_PROXY`        | Set to `true` behind a reverse proxy so rate limiting uses the real client IP (`X-Forwarded-For` / `X-Real-IP`). |
 
 ---
 
@@ -141,16 +134,6 @@ You can deploy WhisperBin behind any reverse proxy with TLS (Nginx, Caddy, etc).
 ├── ui/static/                      # CSS, favicon, optional images
 └── README.md
 ```
-
----
-
-## CI / GitHub Actions
-
-This repository includes a GitHub Actions workflow (`.github/workflows/ci_rpi_image.yml`) that builds a **Docker image optimized for Raspberry Pi (ARM architecture)** and can publish it to GitHub Container Registry.
-
-The resulting image runs well on Raspberry Pi 4 and compatible devices.
-
-You can adapt this workflow for your own deployment targets.
 
 ---
 

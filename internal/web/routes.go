@@ -71,7 +71,7 @@ func (h *Handler) clientIP(r *http.Request) string {
 
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
-	fs := http.FileServer(http.Dir(projectRootPath("ui/static")))
+	fs := http.FileServer(http.Dir("ui/static"))
 	mux.HandleFunc("/privacy", h.privacyHandler)
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 	mux.HandleFunc("/secret", h.rateLimit(h.createHandler))
