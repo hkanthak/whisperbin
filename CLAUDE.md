@@ -18,7 +18,7 @@ One-time secret sharing web app in Go. Secrets are stored encrypted in memory (n
 
 `GET /` (form) → `POST /secret` (store) → link `/{id}`.
 
-- Non-secure: `GET /{id}` decrypts, deletes, shows once.
+- Non-secure: `GET /{id}` shows a reveal page (no side effects, so link-preview scanners cannot consume the secret); `POST /{id}` (CSRF-protected) decrypts, deletes, shows once.
 - Secure: recipient opens `/{id}` and connects to `GET /sse?id=`; the page shows a code the recipient relays to the sender out-of-band; the sender approves via `POST /confirm/{id}`; the secret then streams over SSE and is deleted.
 
 ## Conventions
@@ -59,7 +59,8 @@ Still open (low severity):
 
 - `gosec` G104: several `ExecuteTemplate` return values are unhandled — consider logging them.
 - `gosec` G705: taint warnings on the SSE error line and the status JSON; low real risk (controlled strings, and the secret body is HTML-escaped). Revisit if the templating changes.
-- One-time links can be consumed by URL preview scanners; use secure mode for sensitive shares.
+
+Fixed (June 2026): one-time links being consumed by URL preview scanners — non-secure retrieval now requires a CSRF-protected POST from a reveal page.
 
 ## Learnings
 

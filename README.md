@@ -49,7 +49,7 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
 3. A one-time link is generated: `https://yourhost/{id}`
 4. The recipient visits the link:
    - If secure mode is enabled: recipient requests approval with a passcode.
-   - Otherwise: secret is shown and immediately deleted.
+   - Otherwise: a reveal page is shown; clicking "Reveal Secret" shows the secret and immediately deletes it.
 5. The link is invalid after first use or after TTL expiration.
 
 ---
@@ -62,7 +62,8 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
 - **Routing**:
   - `GET /` — Submit secret form
   - `POST /secret` — Store secret
-  - `GET /{id}` — Retrieve secret (once)
+  - `GET /{id}` — Reveal page (does not consume the secret)
+  - `POST /{id}` — Reveal and delete the secret (CSRF-protected)
   - `POST /confirm/{id}` — Manual approval (secure mode)
   - `GET /status/{id}` — Status polling (secure mode)
   - `GET /sse?id={id}` — SSE delivery (secure mode)
@@ -73,7 +74,7 @@ WhisperBin is designed to be lightweight and easy to run, for example on a Raspb
 
 - **Random IDs**: 128-bit, securely generated with `crypto/rand`
 - **Encryption**: AES-GCM with per-instance 256-bit key
-- **One-time access**: Secret is deleted after first view
+- **One-time access**: Secret is deleted after first view; revealing requires a POST, so link-preview scanners cannot consume it
 - **TTL support**: Expired secrets are automatically purged
 - **Secure mode**: Optional manual recipient approval via passcode + SSE unlock flow
 - **Rate limiting**: Per-IP rate limiting implemented (golang.org/x/time/rate)
