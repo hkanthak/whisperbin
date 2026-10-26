@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"whisperbin/internal"
 	"whisperbin/internal/storage"
@@ -39,6 +40,9 @@ func NewHandlerWithTemplates(store *storage.Store, pattern string) *Handler {
 				dict[key] = values[i+1]
 			}
 			return dict
+		},
+		"year": func() int {
+			return time.Now().Year()
 		},
 	})
 	tmpl = template.Must(tmpl.ParseGlob(pattern))
