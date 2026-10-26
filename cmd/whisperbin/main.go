@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"whisperbin/internal"
@@ -22,13 +23,18 @@ func main() {
 		}
 	}()
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	srv := &http.Server{
-		Addr:              ":8080",
+		Addr:              ":" + port,
 		Handler:           handler.Routes(),
 		ReadHeaderTimeout: 10 * time.Second,
 		IdleTimeout:       120 * time.Second,
 	}
 
-	log.Println("Server running at http://localhost:8080")
+	log.Printf("Server running at http://localhost:%s", port)
 	log.Fatal(srv.ListenAndServe())
 }

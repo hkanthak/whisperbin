@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img src="ui/static/title_small.png" alt="WhisperBin Banner">
+  <img src="ui/static/logo.webp" alt="WhisperBin Banner" width="320">
 </p>
 
 <p align="center">
@@ -140,7 +140,7 @@ WhisperBin runs behind any TLS-terminating reverse proxy (Traefik, Nginx, Caddy)
 
 ## Screenshot
 
-![WhisperBin Screenshot](ui/static/screenshot.png)
+![WhisperBin Screenshot](ui/static/screenshot.webp)
 
 ---
 
